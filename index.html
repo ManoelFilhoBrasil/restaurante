@@ -142,9 +142,26 @@
             <span>R$ 5,00</span>
         </div>
         <div class="item">
-            <label><input type="checkbox" value="7" data-item="Suco Natural" onchange="calcularTotal()"> Suco Natural</label>
+            <label>
+                <input type="checkbox" id="sucoNatural" value="7" data-item="Suco Natural" onchange="toggleSubitensSuco()">
+                Suco Natural
+            </label>
             <span>R$ 7,00</span>
         </div>
+
+        <!-- Subitens de suco natural -->
+        <div id="subitensSuco" style="margin-left: 25px; display: none;">
+            <div class="item">
+                <label><input type="checkbox" value="0" data-item="Suco Maracujá" onchange="calcularTotal()"> Maracujá</label>
+            </div>
+            <div class="item">
+                <label><input type="checkbox" value="0" data-item="Suco Goiaba" onchange="calcularTotal()"> Goiaba</label>
+            </div>
+            <div class="item">
+                <label><input type="checkbox" value="0" data-item="Suco Laranja" onchange="calcularTotal()"> Laranja</label>
+            </div>
+        </div>
+
         <div class="item">
             <label><input type="checkbox" value="3" data-item="Água" onchange="calcularTotal()"> Água</label>
             <span>R$ 3,00</span>
@@ -196,11 +213,24 @@
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let total = 0;
         checkboxes.forEach(item => {
-            if (item.checked) {
+            if (item.checked && parseFloat(item.value) > 0) {
                 total += parseFloat(item.value);
             }
         });
         document.getElementById('total').innerText = total.toFixed(2).replace('.', ',');
+    }
+
+    function toggleSubitensSuco() {
+        const sucoCheckbox = document.getElementById('sucoNatural');
+        const subitensDiv = document.getElementById('subitensSuco');
+
+        if (sucoCheckbox.checked) {
+            subitensDiv.style.display = 'block';
+        } else {
+            subitensDiv.style.display = 'none';
+            subitensDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        }
+        calcularTotal();
     }
 
     function mostrarEndereco(mostrar) {
@@ -245,7 +275,7 @@
         let tipoRecebimento = document.querySelector('input[name="recebimento"]:checked').value;
         let formaPagamento = document.querySelector('input[name="pagamento"]:checked').value;
 
-        let mensagem = "*🍽️ Pedido - Restaurante Familia Amarante*%0A";
+        let mensagem = "*🍽️ Pedido - Restaurante Delícias da Casa*%0A";
         mensagem += "%0A*Itens:*%0A";
 
         itens.forEach(item => {
